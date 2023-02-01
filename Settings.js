@@ -4,12 +4,13 @@ import { color } from 'react-native-reanimated'
 
 
 const Settings = () => {
-  const [hasPermission, setHasPermissions] = useState("unknown");
+  const [hasSMSPermission, setHasSMSPermissions] = useState("unknown");
+  const [hasCONTACTPermission, setHasCONTACTPermissions] = useState("unknown");
   const requestSmsPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         (PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,PermissionsAndroid.PERMISSIONS.SEND_SMS), {
-          title: 'SMS permission required',
+          title: 'SNS permission required',
           message:
             'SMSForwarder needs SMS permission to read and send the SMS',
           buttonNeutral: 'Ask Me Later',
@@ -19,7 +20,7 @@ const Settings = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('SMS PERMISSION GRANTED');
-        setHasPermissions("true")
+        setHasSMSPermissions("true")
       } else {
         console.log('SMS PERMISSION DENIED');
       }
@@ -27,19 +28,57 @@ const Settings = () => {
       console.warn(err);
     }
   };
-  const CheckPerm = async() => {
+  const CheckSMSPerm = async() => {
     try{
       const checked = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS &&
         PermissionsAndroid.PERMISSIONS.SEND_SMS)
         if(checked == true){
-          setHasPermissions("true")
+          setHasSMSPermissions("true")
         }
         else{
-          setHasPermissions("false")
+          setHasSMSPermissions("false")
           ToastAndroid.show("Missing permissions. Please Grant Permissions",3);
 
         }
-        console.log(hasPermission)
+        console.log(hasSMSPermission)
+      }
+    catch(e){
+        console.log(e)
+      }
+  }
+  const requestCONTACTSPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+          title: 'CONTACTS permission required',
+          message:
+            'CONTACTSForwarder needs CONTACTS permission to read the CONTACTS',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('CONTACTS PERMISSION GRANTED');
+        setHasCONTACTPermissions("true")
+      } else {
+        console.log('CONTACTS PERMISSION DENIED');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  const CheckCONTACTPerm = async() => {
+    try{
+      const checked = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
+        if(checked == true){
+          setHasCONTACTPermissions("true")
+        }
+        else{
+          setHasCONTACTPermissions("false")
+          ToastAndroid.show("Missing permissions. Please Grant Permissions",3);
+
+        }
+        console.log(hasCONTACTPermission)
       }
     catch(e){
         console.log(e)
@@ -47,22 +86,40 @@ const Settings = () => {
   }
   // useEffect(() => {
   //   PermDisplay()
-  //     },[hasPermission])
-const PermDisplay = () =>{
-  console.log(hasPermission)
-  if(hasPermission == "true"){
+  //     },[hasSMSPermission])
+const SMSPermDisplay = () =>{
+  console.log(hasSMSPermission)
+  if(hasSMSPermission == "true"){
     return(
       <Text style={{color:'green', fontSize: 20,}}>Granted</Text>
     )
   }
-  else if(hasPermission === "unknown"){
+  else if(hasSMSPermission === "unknown"){
     return(
-      <Button title="Check permissions" onPress={CheckPerm} />
+      <Button title="Check permissions" onPress={CheckSMSPerm} />
     )
   }
   else {
     return(
       <Button title="Grant permissions" onPress={requestSmsPermission} /> 
+    )
+  }
+}
+const CONTACTSPermDisplay = () =>{
+  console.log(hasCONTACTPermission)
+  if(hasCONTACTPermission == "true"){
+    return(
+      <Text style={{color:'green', fontSize: 20,}}>Granted</Text>
+    )
+  }
+  else if(hasCONTACTPermission === "unknown"){
+    return(
+      <Button title="Check permissions" onPress={CheckCONTACTPerm} />
+    )
+  }
+  else {
+    return(
+      <Button title="Grant permissions" onPress={requestCONTACTSPermission} /> 
     )
   }
 }
@@ -76,7 +133,11 @@ const PermDisplay = () =>{
             <Text style={styles.innerTitle}> Permissions </Text>
             <View style={styles.individualPermissionView}>
               <Text style={styles.individualPermissionViewName}>SMS Permission</Text>
-              <PermDisplay />
+              <SMSPermDisplay />
+            </View>
+            <View style={styles.individualPermissionView}>
+              <Text style={styles.individualPermissionViewName}>Contacts Permission</Text>
+              <CONTACTSPermDisplay />
             </View>
           </View>
         </View>

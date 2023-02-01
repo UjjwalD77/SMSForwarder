@@ -33,9 +33,10 @@ const App = () => {
         },
         drawerLabelStyle: {
           color: '#000000',
-          fontSize: 16
+          fontSize: 20
         },
-        headerStyle: { backgroundColor: 'green' },
+        // headerShown:false,
+        headerStyle: { backgroundColor: 'green',  height: 50 },
         drawerPosition: 'left'
       })}>
 
