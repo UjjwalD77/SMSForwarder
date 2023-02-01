@@ -9,14 +9,14 @@ const Settings = () => {
   const requestSmsPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
-        (PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,PermissionsAndroid.PERMISSIONS.SEND_SMS), {
-          title: 'SNS permission required',
-          message:
-            'SMSForwarder needs SMS permission to read and send the SMS',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
+        (PermissionsAndroid.PERMISSIONS.RECEIVE_SMS, PermissionsAndroid.PERMISSIONS.SEND_SMS), {
+        title: 'SNS permission required',
+        message:
+          'SMSForwarder needs SMS permission to read and send the SMS',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('SMS PERMISSION GRANTED');
@@ -28,34 +28,34 @@ const Settings = () => {
       console.warn(err);
     }
   };
-  const CheckSMSPerm = async() => {
-    try{
+  const CheckSMSPerm = async () => {
+    try {
       const checked = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS &&
         PermissionsAndroid.PERMISSIONS.SEND_SMS)
-        if(checked == true){
-          setHasSMSPermissions("true")
-        }
-        else{
-          setHasSMSPermissions("false")
-          ToastAndroid.show("Missing permissions. Please Grant Permissions",3);
+      if (checked == true) {
+        setHasSMSPermissions("true")
+      }
+      else {
+        setHasSMSPermissions("false")
+        ToastAndroid.show("Missing permissions. Please Grant Permissions", 3);
 
-        }
-        console.log(hasSMSPermission)
       }
-    catch(e){
-        console.log(e)
-      }
+      console.log(hasSMSPermission)
+    }
+    catch (e) {
+      console.log(e)
+    }
   }
   const requestCONTACTSPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-          title: 'CONTACTS permission required',
-          message:
-            'CONTACTSForwarder needs CONTACTS permission to read the CONTACTS',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
+        title: 'CONTACTS permission required',
+        message:
+          'CONTACTSForwarder needs CONTACTS permission to read the CONTACTS',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('CONTACTS PERMISSION GRANTED');
@@ -67,62 +67,62 @@ const Settings = () => {
       console.warn(err);
     }
   };
-  const CheckCONTACTPerm = async() => {
-    try{
+  const CheckCONTACTPerm = async () => {
+    try {
       const checked = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-        if(checked == true){
-          setHasCONTACTPermissions("true")
-        }
-        else{
-          setHasCONTACTPermissions("false")
-          ToastAndroid.show("Missing permissions. Please Grant Permissions",3);
+      if (checked == true) {
+        setHasCONTACTPermissions("true")
+      }
+      else {
+        setHasCONTACTPermissions("false")
+        ToastAndroid.show("Missing permissions. Please Grant Permissions", 3);
 
-        }
-        console.log(hasCONTACTPermission)
       }
-    catch(e){
-        console.log(e)
-      }
+      console.log(hasCONTACTPermission)
+    }
+    catch (e) {
+      console.log(e)
+    }
   }
   // useEffect(() => {
   //   PermDisplay()
   //     },[hasSMSPermission])
-const SMSPermDisplay = () =>{
-  console.log(hasSMSPermission)
-  if(hasSMSPermission == "true"){
-    return(
-      <Text style={{color:'green', fontSize: 20,}}>Granted</Text>
-    )
+  const SMSPermDisplay = () => {
+    console.log(hasSMSPermission)
+    if (hasSMSPermission == "true") {
+      return (
+        <Text style={{ color: 'green', fontSize: 20, }}>Granted</Text>
+      )
+    }
+    else if (hasSMSPermission === "unknown") {
+      return (
+        <Button title="Check permissions" onPress={CheckSMSPerm} />
+      )
+    }
+    else {
+      return (
+        <Button title="Grant permissions" onPress={requestSmsPermission} />
+      )
+    }
   }
-  else if(hasSMSPermission === "unknown"){
-    return(
-      <Button title="Check permissions" onPress={CheckSMSPerm} />
-    )
+  const CONTACTSPermDisplay = () => {
+    console.log(hasCONTACTPermission)
+    if (hasCONTACTPermission == "true") {
+      return (
+        <Text style={{ color: 'green', fontSize: 20, }}>Granted</Text>
+      )
+    }
+    else if (hasCONTACTPermission === "unknown") {
+      return (
+        <Button title="Check permissions" onPress={CheckCONTACTPerm} />
+      )
+    }
+    else {
+      return (
+        <Button title="Grant permissions" onPress={requestCONTACTSPermission} />
+      )
+    }
   }
-  else {
-    return(
-      <Button title="Grant permissions" onPress={requestSmsPermission} /> 
-    )
-  }
-}
-const CONTACTSPermDisplay = () =>{
-  console.log(hasCONTACTPermission)
-  if(hasCONTACTPermission == "true"){
-    return(
-      <Text style={{color:'green', fontSize: 20,}}>Granted</Text>
-    )
-  }
-  else if(hasCONTACTPermission === "unknown"){
-    return(
-      <Button title="Check permissions" onPress={CheckCONTACTPerm} />
-    )
-  }
-  else {
-    return(
-      <Button title="Grant permissions" onPress={requestCONTACTSPermission} /> 
-    )
-  }
-}
 
   return (
     <View>
@@ -145,15 +145,15 @@ const CONTACTSPermDisplay = () =>{
     </View>
   )
 
-  
 
-  
+
+
 }
 
 export default Settings
 
 const styles = StyleSheet.create({
-  title:{
+  title: {
     fontSize: 30,
     color: 'black',
     fontWeight: 'bold'
@@ -167,14 +167,14 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: 'black',
   },
-  individualPermissionView:{
+  individualPermissionView: {
     backgroundColor: 'lightgrey',
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 5,
   },
-  individualPermissionViewName:{
+  individualPermissionViewName: {
     fontSize: 19,
     color: 'black',
   }
