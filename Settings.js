@@ -9,7 +9,7 @@ const Settings = () => {
   const requestSmsPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
-        (PermissionsAndroid.PERMISSIONS.RECEIVE_SMS, PermissionsAndroid.PERMISSIONS.SEND_SMS), {
+        (PermissionsAndroid.PERMISSIONS.RECEIVE_SMS, PermissionsAndroid.PERMISSIONS.SEND_SMS && PermissionsAndroid.PERMISSIONS.READ_SMS), {
         title: 'SNS permission required',
         message:
           'SMSForwarder needs SMS permission to read and send the SMS',
@@ -31,7 +31,7 @@ const Settings = () => {
   const CheckSMSPerm = async () => {
     try {
       const checked = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS &&
-        PermissionsAndroid.PERMISSIONS.SEND_SMS)
+        PermissionsAndroid.PERMISSIONS.SEND_SMS && PermissionsAndroid.PERMISSIONS.READ_SMS)
       if (checked == true) {
         setHasSMSPermissions("true")
       }

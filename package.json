@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ernestbies/react-native-android-sms-listener": "^1.0.2",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/drawer": "^6.5.8",
     "@react-navigation/native": "^6.1.3",
