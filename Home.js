@@ -2,12 +2,14 @@ import { Alert, StyleSheet, Text, View, Switch, Button, PermissionsAndroid, Flat
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { selectContactPhone } from 'react-native-select-contact';
-import {BackgroundMain, StopMain} from './background';
-// import StopMain from './background';
+import {BackgroundMain} from './background';
+// import {Subscription} from './background';
+import {StopMain} from './background';
+import SmsListener from '@ernestbies/react-native-android-sms-listener';
 //find error in this file
 
+// let  Subscription = {}
 const Home = () => {
-  
   const contactsTemplate = {}
   console.log(JSON.stringify(contactsTemplate))
 
@@ -37,6 +39,8 @@ const Home = () => {
       if (tempList !== JSON.stringify(contactsTemplate)) {
         setSavedList(JSON.parse(tempList));
       }
+      
+      
     }
     catch (e) {
       console.log(e)
@@ -168,10 +172,18 @@ const Home = () => {
     if(curstate == "true"){
       console.log('start service')
       BackgroundMain();
+      // Subscription = SmsListener.addListener(message => {
+      //   console.log(message)
+      // });
+
+      
     }
     else{
       console.log('stop service')
-      StopMain();
+      BackgroundMain("stop");
+      // Subscription.remove();
+      // StopMain();
+      // BackgroundMain("stop");
     }
   }
 
