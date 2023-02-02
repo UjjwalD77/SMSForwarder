@@ -2,6 +2,9 @@ import { Alert, StyleSheet, Text, View, Switch, Button, PermissionsAndroid, Flat
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { selectContactPhone } from 'react-native-select-contact';
+import {BackgroundMain, StopMain} from './background';
+// import StopMain from './background';
+//find error in this file
 
 const Home = () => {
   
@@ -114,7 +117,7 @@ const Home = () => {
       await AsyncStorage.setItem("contactsToSend", JSON.stringify(newdata));
       
       setSavedList(current=>{
-      const {removedData, ...savedList} = current;
+      const {...savedList} = current;
       return savedList;
       })
     }catch (e) {
@@ -162,7 +165,14 @@ const Home = () => {
     const curstate = mainSwitchIsEnabled ? "false" : "true";
     setMSIE(previousState => !previousState);
     await AsyncStorage.setItem('appEnabled', curstate);
-
+    if(curstate == "true"){
+      console.log('start service')
+      BackgroundMain();
+    }
+    else{
+      console.log('stop service')
+      StopMain();
+    }
   }
 
   return (

@@ -6,7 +6,7 @@
 */
 
 import React, {useEffect} from 'react';
-import SmsListener from '@ernestbies/react-native-android-sms-listener';
+// import SmsListener from '@ernestbies/react-native-android-sms-listener'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import type {PropsWithChildren} from 'react';
@@ -23,12 +23,12 @@ import Home from './Home';
 
 
 const App = () => {
-  useEffect(()=>{
-    SmsListener.addListener(message => {
-        console.log(message);
-        ToastAndroid.show(JSON.stringify(message),3);
-    });
-  },[]);
+  // useEffect(()=>{
+  //   SmsListener.addListener(message => {
+  //       console.log(message);
+  //       ToastAndroid.show(JSON.stringify(message),3);
+  //   });
+  // },[]);
   const Drawer = createDrawerNavigator();
 
   return (
