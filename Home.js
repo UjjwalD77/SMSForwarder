@@ -3,39 +3,39 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { selectContactPhone } from 'react-native-select-contact';
 import {BackgroundMain} from './background';
-// import {Subscription} from './background';
 import {StopMain} from './background';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
-//find error in this file
 
-// let  Subscription = {}
+
+
 const Home = () => {
   const contactsTemplate = {}
-  console.log(JSON.stringify(contactsTemplate))
+  console.log('Home Function called')
 
   const [isFirstLaunch, setIsFirstLauch] = useState();
   const [savedList, setSavedList] = useState(contactsTemplate);
 
   const initFirstLaunch = async () => {
     try {
+      console.log('init first launch called')
       await AsyncStorage.setItem('firstLaunch', "false");
       await AsyncStorage.setItem('appEnabled', "false");
       await AsyncStorage.setItem('contactsToSend', JSON.stringify(contactsTemplate));
+      console.log('store first time ');
     } catch (e) {
       console.log(e)
     }
   }
   const initLaunch = async () => {
     try {
+      console.log('init Lauch called')
       // await AsyncStorage.setItem('contactsToSend',JSON.stringify(contactsTemplate));
       const value = await AsyncStorage.getItem('appEnabled');
-      console.log(value)
-      console.log(typeof (value));
       if (value == "true") {
         setMSIE(true);
       }
       const tempList = await AsyncStorage.getItem('contactsToSend');
-      console.log("list " + tempList)
+      console.log("init launch list " + tempList)
       if (tempList !== JSON.stringify(contactsTemplate)) {
         setSavedList(JSON.parse(tempList));
       }
@@ -51,7 +51,7 @@ const Home = () => {
     try {
       // await AsyncStorage.clear();
       const value = await AsyncStorage.getItem('firstLaunch');
-      if (value === null) {
+      if (value == null) {
         setIsFirstLauch(true);
         console.log('is first launch')
       } else {
@@ -65,7 +65,7 @@ const Home = () => {
 
   useEffect(() => {
     checkFirstLaunch();
-    if (isFirstLaunch && isFirstLaunch === true) {
+    if (isFirstLaunch && (isFirstLaunch == true)) {
       initFirstLaunch();
     }
     initLaunch();
@@ -88,12 +88,14 @@ const Home = () => {
     }
     // Here we are sure permission is granted for android or that platform is not android
     const selection = await selectContactPhone();
+    console.log(JSON.stringify(selection))
     if (!selection) {
       return null;
     }
     let { contact, selectedPhone } = selection;
     console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
     let curContacts = await AsyncStorage.getItem("contactsToSend");
+    console.log('Current Contacts: ' + curContacts);
     curContacts = JSON.parse(curContacts);
     curContacts[selectedPhone.number] = contact.name;
     await AsyncStorage.setItem("contactsToSend", JSON.stringify(curContacts));
@@ -103,15 +105,23 @@ const Home = () => {
   }
 
   const ContactsList = () => {
-    console.log(typeof (savedList))
-    if (savedList === JSON.stringify(contactsTemplate)) {
-      console.log('same?')
+    if(savedList === null){
+      AsyncStorage.setItem("contactsToSend", JSON.stringify(contactsTemplate));
+    }
+    if (savedList === contactsTemplate) {
+      console.log('found default contacts');
       return (
         <Text style={{ fontSize: 23, color: 'black', alignSelf: 'center', padding: 20 }}>No Contacts Selected!</Text>
       )
     }
     else {
-      console.log('not same')
+      console.log('Found saved contacts: ' + JSON.stringify(savedList))
+      return(
+        <FlatList style={styles.listView}
+          data={Object.keys(savedList)}
+          renderItem={({ item }) => <Item name={savedList[item]} number={item} extraData={savedList} />}
+        />
+        )
     }
 
   }
@@ -199,12 +209,7 @@ const Home = () => {
           <Button title='Add Contact' onPress={addContact} ></Button>
         </View>
         <ContactsList />
-        <FlatList style={styles.listView}
-          data={Object.keys(savedList)}
-          renderItem={({ item }) => <Item name={savedList[item]} number={item}
-          extraData={savedList}
-          />}
-        />
+        
       </View>
     </View>
   )
