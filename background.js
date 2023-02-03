@@ -1,6 +1,7 @@
 import BackgroundService from 'react-native-background-actions';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
-
+import DirectSms from 'react-native-direct-sms';
+import {PermissionsAndroid} from 'react-native';
 
 let  Subscription = {}
 export const BackgroundMain = async(command)=>{
@@ -9,8 +10,30 @@ export const BackgroundMain = async(command)=>{
         await BackgroundService.stop();
         return;
     }
+    const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.SEND_SMS,
+            {
+                title: 'App Sms Permission',
+                message:
+                'App needs access to your inbox         ' +
+                'so you can send messages in background.',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+            },
+        );
     Subscription = SmsListener.addListener(message => {
     console.log(message)
+    try {
+        
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            DirectSms.sendDirectSms('839288989', 'This is a direct sms');
+        } else {
+            console.log('SMS permission denied');
+        }
+    } catch (err) {
+        console.warn(err);
+    }
     });
     const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
     
