@@ -26,8 +26,7 @@ export const BackgroundMain = async(command)=>{
         },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            // DirectSms.sendDirectSms('8780841905', 'Hi default sms');
-            console.log('tried to send the default sms')
+            console.log('Checked permission ✔️')
         } else {
             console.log('SMS permission denied');
         }
