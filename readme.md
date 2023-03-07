@@ -27,7 +27,7 @@
 
 
 ### Build the apk
-    You can follow [this](https://dev.to/silvenleaf/generate-apk-for-pure-react-native-app-df7) guide to build the apk
+ * You can follow [this](https://medium.com/geekculture/react-native-generate-apk-debug-and-release-apk-4e9981a2ea51) guide to build the release apk
 
 
 ### To-Do
